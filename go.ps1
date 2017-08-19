@@ -2,9 +2,18 @@
 
 $workingDirectory = Join-Path $env:USERPROFILE ".hobart-wallpaper"
 
+if (-not (Test-Path $workingDirectory)){
+$wd = new-item $workingDirectory -ItemType Directory
+$wd.Attributes = "hidden"
+$wd = $null
+"Created Working Directory: '$workingDirectory"
+}
+
 Function Set-WallPaper($Value){
- Set-ItemProperty -path 'HKCU:\Control Panel\Desktop\' -name wallpaper -value $value
- rundll32.exe user32.dll, UpdatePerUserSystemParameters
+write-host "Setting wallpaper to $value"
+Set-ItemProperty -path 'HKCU:\Control Panel\Desktop\' -name wallpaper -value $value
+rundll32.exe user32.dll, UpdatePerUserSystemParameters
+
 }
 
 Function Get-RoseBayKunanyi {
@@ -18,8 +27,10 @@ Function Get-BarnBougle {
 
 }
 
+
+
 while ($true){
   Get-RoseBayKunanyi
-  Set-WallPaper($workingDirectory/rbk.jpg)
-  start-sleep -m 15
+  Set-WallPaper $workingDirectory\rbk.jpg
+  start-sleep -s 900
 }
